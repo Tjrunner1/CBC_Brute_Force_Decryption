@@ -1,7 +1,6 @@
 # We are team 6
 from hashlib import algorithms_available
-from ssl import _Cipher
-from cryptography.hazmat.primitives.ciphers import modes
+from cryptography.hazmat.primitives.ciphers import modes, Cipher, algorithms
 
 
 # Function that adds padding to fit desired key length
@@ -10,10 +9,10 @@ def add_padding(s, length):
         s += " "
     return s
 
-def applyDecryption(key, iv):
-    cipher = _Cipher(algorithms_available.AES(key), modes.CBC(iv))
+def applyDecryption(key, iv, ct):
+    cipher = Cipher(algorithms.AES128(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
-    # return
+    return decryptor.update(ct) + decryptor.finalize()
 
 # Define a main function that loops through the wordsEn.txt and prints to decrypted.txt if the output countains "the" in it
 def main():
@@ -27,13 +26,13 @@ def main():
     
     # Loop through all the possible words and attempt to decrypt it
     iv = "0000000000000000"
-    for word in englishWordsFile.readlines():
-    # word = englishWordsFile.readline()
-        key = add_padding(word, 16)
-        decryptedOutput = applyDecryption(key, iv)
-        if key.count("the") > 0:
-            decryptedFile.write("OUTPUT HERE")
-            keyFile.write(key)
+    # for word in englishWordsFile.readlines():
+    word = englishWordsFile.readline()
+    key = add_padding(word, 16)
+    decryptedOutput = applyDecryption(key, iv, encryptedFile.readlines())
+    if decryptedOutput.count("the") > 0:
+        decryptedFile.write("OUTPUT HERE")
+        keyFile.write(key)
         
         
     # Close all neccessary files
