@@ -25,11 +25,12 @@ def main():
     decryptedFile = open("decrypted.txt", "w")
     keyFile = open("key.txt", "w")
     
+    # Loop through all the possible words and attempt to decrypt it
     iv = "0000000000000000"
     for word in englishWordsFile.readlines():
     # word = englishWordsFile.readline()
         key = add_padding(word, 16)
-        
+        decryptedOutput = applyDecryption(key, iv)
         if key.count("the") > 0:
             decryptedFile.write("OUTPUT HERE")
             keyFile.write(key)
