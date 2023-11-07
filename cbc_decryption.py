@@ -23,6 +23,8 @@ def main():
         
     
     englishWordsFile.close()
+    cipher = Cipher(algoritgms.AES(key), modes.CBC(iv))
+    decryptor = cipher.decryptor()
 
 
 if __name__ == "__main__":
