@@ -3,9 +3,7 @@ from cryptography.hazmat import *
 
 # Function that adds padding
 def add_padding(s, length):
-    print(length - len(s))
-    print(len(s))
-    for i in range(length - len(s), length):
+    for i in range(len(s), length):
         s += " "
     return s
     
@@ -17,10 +15,12 @@ def add_padding(s, length):
 def main():
     print("Starting")
     englishWordsFile = open("wordsEn.txt", "r")
-    # for word in englishWordsFile.readlines():
-    word = englishWordsFile.readline()
-    word = add_padding(word, 16)
-    print(len(word))
+    iv = "0000000000000000"
+    
+    for word in englishWordsFile.readlines():
+    # word = englishWordsFile.readline()
+        key = add_padding(word, 16)
+        
     
     englishWordsFile.close()
 
