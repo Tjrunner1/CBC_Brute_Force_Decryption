@@ -1,5 +1,8 @@
 # We are team 6
-from cryptography.hazmat import *
+from hashlib import algorithms_available
+from ssl import _Cipher
+from cryptography.hazmat.primitives.ciphers import modes
+
 
 # Function that adds padding to fit desired key length
 def add_padding(s, length):
@@ -8,7 +11,7 @@ def add_padding(s, length):
     return s
 
 def applyDecryption(key, iv):
-    cipher = Cipher(algoritgms.AES(key), modes.CBC(iv))
+    cipher = _Cipher(algorithms_available.AES(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
     # return
 
