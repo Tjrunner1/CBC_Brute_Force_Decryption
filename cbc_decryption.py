@@ -1,5 +1,4 @@
 # We are team 6
-from hashlib import algorithms_available
 from cryptography.hazmat.primitives.ciphers import modes, Cipher, algorithms
 
 
