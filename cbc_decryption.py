@@ -1,12 +1,20 @@
 # We are team 6
 from cryptography.hazmat.primitives.ciphers import modes, Cipher, algorithms
 
+byteEncoding = 'ascii'
 
 # Function that adds padding to fit desired key length
-def add_padding(s, length):
+def make_key(s, length):
+    # print("Before:" + s + ",")
+    s = s.replace("\n", "")
+    
     for i in range(len(s), length):
         s += " "
-    return s
+    if len(s) > length:
+        s = s[:length]
+        
+    # print("After:" + s + ",")
+    return bytes(s, byteEncoding)
 
 def applyDecryption(key, iv, ct):
     cipher = Cipher(algorithms.AES128(key), modes.CBC(iv))
@@ -19,19 +27,20 @@ def main():
     
     # Open all neccessary files
     englishWordsFile = open("wordsEn.txt", "r")
-    encryptedFile = open("encrypted6.txt", "r")
-    decryptedFile = open("decrypted.txt", "w")
-    keyFile = open("key.txt", "w")
+    encryptedFile = open("encrypted6.txt", "rb")
+    decryptedFile = open("decrypted.txt", "wb")
+    keyFile = open("key.txt", "wb")
     
     # Loop through all the possible words and attempt to decrypt it
-    iv = "0000000000000000"
-    # for word in englishWordsFile.readlines():
-    word = englishWordsFile.readline()
-    key = add_padding(word, 16)
-    decryptedOutput = applyDecryption(key, iv, encryptedFile.readlines())
-    if decryptedOutput.count("the") > 0:
-        decryptedFile.write("OUTPUT HERE")
-        keyFile.write(key)
+    iv = bytes("0000000000000000", byteEncoding)
+    for word in englishWordsFile.readlines():
+    # word = englishWordsFile.readline()
+        key = make_key(word, 16)
+        decryptedOutput = applyDecryption(key, iv, encryptedFile.read())
+        if decryptedOutput.count(bytes("the", byteEncoding)) > 0:
+            print("Found something!")
+            decryptedFile.write(decryptedOutput)
+            keyFile.write(key)
         
         
     # Close all neccessary files
