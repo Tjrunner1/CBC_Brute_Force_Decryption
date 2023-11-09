@@ -13,7 +13,7 @@ def make_key(s, length):
     if len(s) > length:
         s = s[:length]
         
-    # print("After:" + s + ",")
+    #print("After:" + s + "," + f"({len(s)} bytes)")
     return bytes(s, byteEncoding)
 
 def applyDecryption(key, iv, ct):
@@ -32,15 +32,16 @@ def main():
     keyFile = open("key.txt", "wb")
     
     # Loop through all the possible words and attempt to decrypt it
-    iv = bytes("0000000000000000", byteEncoding)
+    ciphertext = encryptedFile.read()
+    iv = bytes("0" * 16, byteEncoding)
     for word in englishWordsFile.readlines():
     # word = englishWordsFile.readline()
         key = make_key(word, 16)
-        decryptedOutput = applyDecryption(key, iv, encryptedFile.read())
+        decryptedOutput = applyDecryption(key, iv, ciphertext)
         if decryptedOutput.count(bytes("the", byteEncoding)) > 0:
             print("Found something!")
-            decryptedFile.write(decryptedOutput)
-            keyFile.write(key)
+            decryptedFile.write(decryptedOutput + b"\n")
+            keyFile.write(key + b"\n")
         
         
     # Close all neccessary files
