@@ -1,0 +1,1 @@
+To run the program, you can open it in visual studio code, and then click the run button for the file cbc_decryption.py

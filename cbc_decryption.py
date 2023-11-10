@@ -16,6 +16,8 @@ def make_key(s, length):
     #print("After:" + s + "," + f"({len(s)} bytes)")
     return bytes(s, byteEncoding)
 
+# Function that creates a ciper using AES128 and CBC, and seeded with a key and iv,
+#  then it decrypts the ct using the created cipher
 def applyDecryption(key, iv, ct):
     cipher = Cipher(algorithms.AES128(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
@@ -35,9 +37,9 @@ def main():
     ciphertext = encryptedFile.read()
     iv = bytes("0" * 16, byteEncoding)
     for word in englishWordsFile.readlines():
-    # word = englishWordsFile.readline()
         key = make_key(word, 16)
         decryptedOutput = applyDecryption(key, iv, ciphertext)
+        # If found target word, print to output
         if decryptedOutput.count(bytes("the", byteEncoding)) > 0:
             print("Found something!")
             decryptedFile.write(decryptedOutput + b"\n")
